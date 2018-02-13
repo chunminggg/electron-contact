@@ -36,7 +36,7 @@
     </main>
     <footer>
          <Checkbox v-model="isAllSelected">全选</Checkbox>
-        <span>已选0个联系人</span>
+        <span>已选{{selectedLength}}个联系人</span>
         <span>共{{items.length}}个联系人</span>
           <Button type="primary" size="small" @click="addUser">添加联系人</Button>
     </footer>
@@ -60,6 +60,17 @@ export default {
           item.isChoose = false
         }
       }
+    },
+    items:{
+      deep:true,
+      handler:function(newVal,oldVal){
+        this.selectedLength = 0
+         for (let item of this.items) {
+           if (item.isChoose == true) {
+             this.selectedLength += 1
+           }
+        }
+      }
     }
   },
   data() {
@@ -70,6 +81,7 @@ export default {
       selectedIndex:null,
       formItem: userData[0],
       isShowForm:false,
+      selectedLength:0,
     };
   },
   methods: {
@@ -92,8 +104,9 @@ export default {
       this.$Message.success('删除成功')
     },
     addUser(){
-      this.items.push({name:`miao${this.items.length+1}`,isChosse:false,phoneNumber:'',email:'',address:'',comment:''})
+      this.items.push({name:`miao${this.items.length+1}`,isChoose:false,phoneNumber:'',email:'',address:'',comment:''})
       this.openSingleMan(this.items.length -1)
+
     },
   }
 };
